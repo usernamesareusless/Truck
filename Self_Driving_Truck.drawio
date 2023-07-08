@@ -1,5 +1,5 @@
-<mxfile host="app.diagrams.net" modified="2023-07-08T23:12:53.817Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="Fx1aqg1UqhGX-lsIWeCi" version="21.5.2" type="github">
-  <diagram name="Page-1" id="x9nk3bP7Pb1QJkFsKIN1">
+<mxfile host="app.diagrams.net" modified="2023-07-08T23:25:46.756Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="UkEpB6K_FlKbQLGKDdFN" version="21.5.2" type="github" pages="2">
+  <diagram name="Overview" id="x9nk3bP7Pb1QJkFsKIN1">
     <mxGraphModel dx="1900" dy="549" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
@@ -35,7 +35,7 @@
         <mxCell id="K4P4itspMZjvZByA0tp3-12" value="Battery Enclosure" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="360" y="170" width="120" height="20" as="geometry" />
         </mxCell>
-        <UserObject label="Write Sudo Code" link="https://app.diagrams.net/#Husernamesareusless%2FTruck%2Fmain%2FTruck%20Software%20Sudo%20Code.drawio" linkTarget="_blank" id="K4P4itspMZjvZByA0tp3-13">
+        <UserObject label="Write Sudo Code" link="data:page/id,xuv6uu3qpUVJRmWFbTFE" id="K4P4itspMZjvZByA0tp3-13">
           <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0000FF;strokeColor=#b85450;gradientColor=#FF0000;gradientDirection=east;" vertex="1" parent="1">
             <mxGeometry x="360" y="400" width="120" height="20" as="geometry" />
           </mxCell>
@@ -120,6 +120,44 @@
         </mxCell>
         <mxCell id="K4P4itspMZjvZByA0tp3-61" value="&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Self Driving Truck" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
           <mxGeometry x="60" y="80" width="120" height="440" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="xuv6uu3qpUVJRmWFbTFE" name="Sudo Code">
+    <mxGraphModel dx="1050" dy="549" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-1" value="Sudo Code" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="120" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="110" y="260" width="140" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-3" value="Functions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="120" y="260" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="110" y="500" width="140" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-5" value="main" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="120" y="500" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="110" y="110" width="140" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-7" value="Initialize" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="120" y="110" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-8" value="Initial Variables/ constants" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="140" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-9" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="180" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Ikft3QKCmfd0DzgQ8k3A-10" value="Set Link to Code" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
