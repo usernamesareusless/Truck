@@ -1,0 +1,42 @@
+//Hbridge 1st successful test
+//Code drives motor back and forth on a 1 second timer
+
+const int pnpleft = 7;
+const int pnpright = 8;
+const int npnleft = 12;
+const int npnright = 13;
+int pinstatetemp = 0;
+
+
+unsigned long preset =1000;
+int timerdone = 0;
+
+void setup(){
+  pinMode(pnpleft, OUTPUT);
+  pinMode(pnpright, OUTPUT);
+  pinMode(npnleft, OUTPUT);
+  pinMode(npnright, OUTPUT);
+
+  Serial.begin(9600);
+}
+
+
+void loop(){
+//recuring timmer
+  if(millis() >= preset){
+    preset += 1000;
+    Serial.println(millis());
+    Serial.println(preset);
+    timerdone = 1;
+  }
+
+if(timerdone){
+  pinstatetemp = !pinstatetemp;
+  digitalWrite(pnpleft, pinstatetemp);
+  digitalWrite(npnright, !pinstatetemp);
+  digitalWrite(pnpright, !pinstatetemp);
+  digitalWrite(npnleft, pinstatetemp);
+}
+
+timerdone = 0;
+}
