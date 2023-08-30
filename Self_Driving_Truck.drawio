@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-08-20T02:25:27.612Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36" etag="2ypVCu9SUe2soHoY90za" version="21.6.8" type="github" pages="5">
+<mxfile host="app.diagrams.net" modified="2023-08-30T13:12:14.625Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="I3E022GxUT1Yx65UetIb" version="21.6.9" type="github" pages="5">
   <diagram name="Overview" id="x9nk3bP7Pb1QJkFsKIN1">
     <mxGraphModel dx="1900" dy="542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -25,7 +25,7 @@
           <mxGeometry x="360" y="140" width="120" height="20" as="geometry" />
         </mxCell>
         <UserObject label="Arduino Driving Hbridge" tooltip="Research" link="data:page/id,OieQdgkhY5biBXirIx0L" id="K4P4itspMZjvZByA0tp3-8">
-          <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=default;gradientColor=#FF0000;gradientDirection=east;" parent="1" vertex="1">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;gradientDirection=east;" parent="1" vertex="1">
             <mxGeometry x="360" y="240" width="120" height="40" as="geometry" />
           </mxCell>
         </UserObject>
@@ -126,7 +126,7 @@
         <mxCell id="K4P4itspMZjvZByA0tp3-61" value="&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;Self Driving Truck" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
           <mxGeometry x="60" y="80" width="120" height="440" as="geometry" />
         </mxCell>
-        <mxCell id="u4Ty9pAweLQQ3XWgRYDR-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="K4P4itspMZjvZByA0tp3-8" target="K4P4itspMZjvZByA0tp3-8">
+        <mxCell id="u4Ty9pAweLQQ3XWgRYDR-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="K4P4itspMZjvZByA0tp3-8" target="K4P4itspMZjvZByA0tp3-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
