@@ -1,0 +1,66 @@
+//====== Variables======
+const int ledPin = 11;
+int pinState = 0;
+
+//====== Classes======
+class timer{
+    //---variables---
+    private:
+    int flag = 0;
+    int preset;
+    unsigned long start;
+
+    public:    
+    int done = 0;
+    
+    //---Constructor---
+    timer(int ps): preset(ps){
+    }
+    
+    //---Functions---
+    void TT(){
+        if (flag == 0){
+            start = millis();
+            flag = 1;
+        }
+        if (millis() - start >= preset){
+          done = 1;
+        }
+    };
+
+    void reset(){
+      flag = 0;
+      done = 0;
+    };
+};
+
+//====== class init======
+timer time1(3000);
+timer time2(4000);
+
+//====== setup======
+void setup(){
+  pinMode(ledPin, OUTPUT);
+
+  Serial.begin(9600);
+}
+
+//====== Loop======
+void loop(){
+    time1.TT();
+    if(time1.done == 1){
+      Serial.println("done");
+      Serial.println(millis());
+      time1.reset();
+      pinState = 1;
+    }
+
+    time2.TT();
+    if(time2.done == 1){
+      Serial.println("done2");
+      time2.reset();
+      Serial.println(millis());
+      pinState = 0;
+    }
+    digitalWrite(ledPin, pinState);
+}
