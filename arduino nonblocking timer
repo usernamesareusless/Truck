@@ -1,0 +1,57 @@
+class timer{
+    public:
+    int flag = 0;
+    int done = 0;
+    int preset;
+    unsigned long acc;
+    unsigned long start;
+
+    timer(int ps): preset(ps){
+    
+    }
+    
+    void TT(){
+
+        if (flag == 0){
+            start = millis();
+            flag = 1;
+
+
+        }
+        if (millis() - start >= preset){
+          done = 1;
+
+        }
+
+    };
+
+    void reset(){
+      flag = 0;
+      done = 0;
+    };
+};
+
+
+timer time1(3000);
+timer time2(4000);
+void setup(){
+  
+  Serial.begin(9600);
+}
+
+void loop(){
+    time1.TT();
+    if(time1.done == 1){
+      Serial.println("done");
+      Serial.println(millis());
+      time1.reset();
+    }
+    time2.TT();
+    if(time2.done == 1){
+      Serial.println("done2");
+      time2.reset();
+      Serial.println(millis());
+    }
+
+
+}
