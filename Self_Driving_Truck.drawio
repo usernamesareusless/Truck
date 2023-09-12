@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-09-10T13:17:44.453Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="J5i83Su7-1lqE-0pOCQy" version="21.7.2" type="github" pages="5">
+<mxfile host="app.diagrams.net" modified="2023-09-12T14:09:29.333Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36" etag="NW4IAyPWmIWF1JCqn1aY" version="21.7.2" type="github" pages="5">
   <diagram name="Overview" id="x9nk3bP7Pb1QJkFsKIN1">
-    <mxGraphModel dx="2284" dy="758" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1900" dy="542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -37,9 +37,11 @@
             <mxGeometry x="360" y="290" width="120" height="20" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="K4P4itspMZjvZByA0tp3-12" value="Battery Enclosure" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="360" y="170" width="120" height="20" as="geometry" />
-        </mxCell>
+        <UserObject label="Battery Enclosure" tooltip="Batery for existing charger" id="K4P4itspMZjvZByA0tp3-12">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+            <mxGeometry x="360" y="170" width="120" height="20" as="geometry" />
+          </mxCell>
+        </UserObject>
         <UserObject label="Write Sudo Code" link="data:page/id,xuv6uu3qpUVJRmWFbTFE" id="K4P4itspMZjvZByA0tp3-13">
           <mxCell style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;gradientDirection=east;" parent="1" vertex="1">
             <mxGeometry x="360" y="400" width="120" height="20" as="geometry" />
