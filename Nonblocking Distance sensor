@@ -1,0 +1,94 @@
+//====== Variables======
+const int trigPin = 9;
+const int echoPin = 10;
+long duration;
+int distance;
+
+
+//====== Classes======
+class timer{
+    //---variables---
+    private:
+    int flag = 0;
+    int preset;
+    unsigned long start;
+
+    public:    
+    int done = 0;
+    
+    //---Constructor---
+    timer(int ps): preset(ps){
+    }
+    
+    //---Functions---
+    void TT(){
+        if (flag == 0){
+            start = millis();
+            flag = 1;
+        }
+        if (millis() - start >= preset){
+          done = 1;
+        }
+    };
+
+    void reset(){
+      flag = 0;
+      done = 0;
+    };
+};
+
+//====== class init======
+timer distannceLeft_INIT(5);
+timer distannceLeft_Trig(10);
+timer distannceLeft_Reset(1000);
+
+
+//====== setup======
+void setup(){
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  Serial.begin(9600);
+}
+
+//====== Loop======
+void loop(){
+
+distannceLeft_INIT.TT();
+
+    if(distannceLeft_INIT.done == 1){
+    
+      digitalWrite(trigPin, LOW);
+      //Serial.println("Trig LOW");
+      distannceLeft_Trig.TT();
+      distannceLeft_Reset.TT();
+      
+
+    }
+
+  //trig
+  if(distannceLeft_Trig.done == 1){
+    digitalWrite(trigPin, HIGH);
+    //Serial.println("Trig HIGH");
+    distannceLeft_Trig.TT();
+    distannceLeft_INIT.done = 2;
+  }
+  // read
+  if(distannceLeft_Trig.done == 1){
+    digitalWrite(trigPin, LOW);
+    //Serial.println("Trig LOW!");
+    duration = pulseIn(echoPin, HIGH);
+    distance = duration*0.034/2;
+    Serial.print("Distance: ");
+    Serial.println(distance);
+    distannceLeft_Trig.done = 2;
+  }
+
+  //reset
+  if(distannceLeft_Reset.done == 1){
+    distannceLeft_INIT.reset();
+    distannceLeft_Trig.reset();
+    distannceLeft_Reset.reset();
+  }
+
+}
