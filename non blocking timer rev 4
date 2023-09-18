@@ -1,0 +1,37 @@
+//timer(preset)----------------------------
+// Inputs: start(), reset()
+// Outputs: .timerTimming, .done
+//------------------------------------------
+class timer{
+  private:
+  int startTime;
+  int preset;
+  public:
+  int timerTimming = 0;
+  int done;
+
+  timer(int presetInput){
+    preset = presetInput;
+    
+  }
+
+  void start(){
+
+    if(timerTimming == 0 && done == 0){
+      startTime = millis();
+      timerTimming = 1; 
+    }
+
+    if(millis() - startTime >= preset && timerTimming == 1 && done == 0){
+      timerTimming = 0;
+      done = 1;
+      
+    }
+  }
+
+  void reset(){
+    timerTimming = 0;
+    done = 0;
+  }
+
+};
