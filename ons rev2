@@ -1,0 +1,18 @@
+//ons---------------------------------------
+//.shot(variableToOneshot)
+//------------------------------------------
+class ons{
+
+  public:
+  int latch = 0;
+
+  int shot(int currentValue){
+    if(currentValue == 1 && latch == 0){
+      latch = 1;
+      return 1;
+    }
+    else{
+      return 0 ;
+    }
+  }
+}
