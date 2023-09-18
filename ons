@@ -1,0 +1,16 @@
+//======ons(returns 1)======
+
+int ons(int currentValue){
+  static int latch = 0;
+  Serial.println("/");
+  if(currentValue == 1 && latch == 0){
+    latch = 1;
+    return 1;
+    Serial.println("return");
+  }
+
+  if(currentValue == 0 && latch == 1){
+    latch = 0;
+        return 0;
+  }
+}
