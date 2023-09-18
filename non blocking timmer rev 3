@@ -1,0 +1,57 @@
+class timmer{
+  public:
+  int startTime;
+  int preset;
+  int timmerTimming = 0;
+  int done;
+
+  timmer(int presetInput){
+    preset = presetInput;
+    
+  }
+
+
+  void start(){
+
+    if(timmerTimming == 0 && done == 0){
+      startTime = millis();
+      timmerTimming = 1; 
+    }
+
+    if(millis() - startTime >= preset && timmerTimming == 1 && done == 0){
+      timmerTimming = 0;
+      done = 1;
+      
+    }
+  }
+
+  void reset(){
+    timmerTimming = 0;
+    done = 0;
+  }
+
+};
+
+timmer oneSecond(1000);
+
+//------------------------------------------
+void setup() {
+  // put your setup code here, to run once:
+pinMode(buttonPin, INPUT);
+pinMode(ledPin , OUTPUT);
+Serial.begin(9600);
+}
+
+//------------------------------------------
+void loop() {
+
+oneSecond.start();
+// oneSecond.start();
+if(oneSecond.done == 1){
+  Serial.println("complete");
+  oneSecond.reset();
+}
+
+
+ 
+}
