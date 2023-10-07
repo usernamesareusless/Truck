@@ -265,7 +265,8 @@
 
   if(delayedStart.done == 1 && calAngle <= 180){
     servo1.point(calAngle);
-    calAngle += 45;
+    // gear ratio is 34:14, 37 degrees = 45
+    calAngle += 37;
     delayedStart.reset();
   }
 
