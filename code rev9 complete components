@@ -1,0 +1,278 @@
+//======Initialize Libraries======
+  #include <Servo.h>
+  #include <Arduino.h> 
+//
+
+//======Global Variables======
+
+  const int hbridgeForward = 12;
+  const int hbridgeReverse = 13;
+  const int obsticalSetpoint = 100;
+  int rightActive;
+  int leftActive;
+  int leftClear;
+  int rightClear;
+  int forward;
+  int reverse;
+  int window;
+  int zone1Obsticle;
+  int zone2Obsticle;
+  int zone3Obsticle;
+  int zone4Obsticle;
+  int range;
+  int obstruction;
+// 
+
+//======Library Blocks======
+
+  //debug("string to print", int to print)----
+  //------------------------------------------
+  void debug(String message="debug", int number = 999){
+    // sting text = message;
+    Serial.print(message);
+    Serial.print(" : ");
+    Serial.print(number);
+    Serial.print(" / Millis : ");
+    Serial.println(millis());
+  }
+
+  //ons---------------------------------------
+  //.shot(variableToOneshot)
+  //------------------------------------------
+  class ons{
+
+    public:
+    int latch = 0;
+
+    int shot(int currentValue){
+      if(currentValue == 1 && latch == 0){
+        latch = 1;
+        return 1;
+      }
+      if(currentValue == 0 && latch == 1){
+        latch = 0;
+        return 0;
+      }
+      else{
+        return 0;
+      }
+    }
+  };
+
+  //timer(preset)-----------------------------
+  // Inputs: start(), reset()
+  // Outputs: .timerTiming, .done
+  //------------------------------------------
+  class timer{
+    private:
+    unsigned long startTime;
+    unsigned long preset;
+
+    public:
+    int timerTiming = 0;
+    int done;
+
+    timer(unsigned long presetInput){
+      preset = presetInput;
+    }
+
+    void start(){
+
+      if(timerTiming == 0 && done == 0){
+        startTime = millis();
+        timerTiming = 1; 
+      }
+
+      if(millis() - startTime >= preset && timerTiming == 1 && done == 0){
+        timerTiming = 0;
+        done = 1;
+      }
+    }
+
+    void reset(){
+      timerTiming = 0;
+      done = 0;
+    }
+
+  };
+
+  //countUp-----------------------------------
+  // Inputs: start(), stop(), reset()
+  // Outputs: .accumulatedTime .timerTiming
+  //------------------------------------------
+  class countUp{
+    private:
+    unsigned long startTime;
+
+    public:
+    unsigned long accumulatedTime = 0;
+    int timerTiming = 0;
+    int done;
+
+
+    void start(){
+      if(timerTiming == 0 && done == 0){
+        startTime = millis();
+        timerTiming = 1;
+      }
+    }
+
+    void stop(){
+      accumulatedTime = millis() - startTime;
+      done = 1;
+      timerTiming = 0;
+    }
+
+    void reset(){
+      done = 0;
+      timerTiming = 0;
+    }
+  };
+
+//
+
+//======Devices======
+
+  //distance(trigPin, echoPin)----------------
+  // Inputs: measure()
+  // Outputs: returns distance
+  // Requires timer and ons class
+  //------------------------------------------
+  class distance{
+    private:
+    int trigPin;
+    int echoPin;
+    
+    unsigned long distance;
+    unsigned long duration;
+
+    timer initializeTimer;
+    timer triggerTimer;
+    timer resetTimer;
+    ons one;
+    
+    public:
+
+    distance(int trig, int echo) : trigPin(trig), echoPin(echo),initializeTimer(1), triggerTimer(1), resetTimer(50) {
+      pinMode(trigPin, OUTPUT);
+      pinMode(echoPin, INPUT);
+    }
+
+    int measure(){
+      //INIT 2ns
+      
+        resetTimer.start();
+        initializeTimer.start(); 
+        if(initializeTimer.timerTiming == 1){
+          digitalWrite(trigPin, LOW);
+        }
+
+        // Trigger 10 ns
+        if(initializeTimer.done == 1){
+          triggerTimer.start();
+        }
+        if(triggerTimer.timerTiming == 1){
+          digitalWrite(trigPin, HIGH);
+        }
+
+      //End Trigger
+        if(one.shot(triggerTimer.done) == 1){
+          digitalWrite(trigPin, LOW);
+          duration = pulseIn(echoPin, HIGH);
+          // Calculate the distance in centimeters
+          distance = duration * 0.034 / 2;
+
+          // Serial.print("Distance: ");
+          // Serial.print(distance);
+          // Serial.println(" cm");
+
+
+          //reset
+        }
+        if(resetTimer.done == 1){
+          initializeTimer.reset();
+          triggerTimer.reset();
+          resetTimer.reset();
+        }
+      
+        return distance;
+    }
+  };
+
+  //servoDrive(pwmPin)------------------------
+  // Inputs: sweep(), point(angle)
+  // Outputs: .angle
+  // requires timer class
+  //------------------------------------------
+  class servoDrive {
+    private:
+    int servoPin; // Define the pin for the servo control
+    int direction; // 0 = left 1 = right
+    int init; 
+    Servo servo;  // Create a servo object
+    timer servoRate;
+    
+    public:
+    int angle;
+    servoDrive(int pin) : servoPin(pin), servoRate(50)  {
+    }
+
+    void sweep() {
+      if(init == 0){
+        servo.attach(servoPin);
+        init = 1;
+      }
+
+      // Sweep the servo from 0 to 180 degrees
+      servoRate.start();
+      if(servoRate.done == 1){
+        if(direction == 0){
+          angle = angle + 2;
+        }
+        if(direction == 1){
+          angle = angle -2;
+        }
+        servo.write(angle);
+        servoRate.reset();
+      }
+      if(angle <= 0){
+        direction = 0;
+      }
+      if(angle >= 180){
+        direction = 1;
+      }
+    }
+    void point(int angle){
+            if(init == 0){
+        servo.attach(servoPin);
+        init = 1;
+      }
+    servo.write(angle);
+    }
+  };
+
+//
+
+//======Initialize Class======
+  servoDrive servo1(11);
+  distance rangeFinder(7,8);
+//
+
+//======Setup======
+  void setup() {
+      // put your setup code here, to run once:
+    pinMode(hbridgeForward, OUTPUT);
+    pinMode(hbridgeReverse, OUTPUT);
+
+    Serial.begin(9600);
+  }
+//
+
+//======Main Loop======
+  void loop() {
+
+  servo1.sweep();
+
+
+  }
+//
