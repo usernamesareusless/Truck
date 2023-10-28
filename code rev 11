@@ -1,0 +1,433 @@
+//======Initialize Libraries======
+  #include <Servo.h>
+  #include <Arduino.h> 
+//
+
+//======Global Variables======
+
+  const int leftForward = 12;
+  const int leftReverse = 13;
+  const int rightForward = 2;
+  const int rightReverse = 4;
+
+  int startUpFlag = 0;
+
+  int obstructionDistance = 500;
+  int gearRatio = 38;
+  int zone;
+
+  int liveAngle;
+  int obstructionFar;
+  int obstructionNear;
+  int turning;
+
+  int forward;
+  int reverse;
+  int left;
+  int right;
+// 
+
+//======Library Blocks======
+
+  //debug("string to print", int to print)----
+  //------------------------------------------
+  void debug(String message="debug", int number = 999){
+    // sting text = message;
+    Serial.print(message);
+    Serial.print(" : ");
+    Serial.print(number);
+    Serial.print(" / Millis : ");
+    Serial.println(millis());
+  }
+
+  //ons---------------------------------------
+  //.shot(variableToOneshot)
+  //------------------------------------------
+  class ons{
+
+    public:
+    int latch = 0;
+
+    int shot(int currentValue){
+      if(currentValue == 1 && latch == 0){
+        latch = 1;
+        return 1;
+      }
+      if(currentValue == 0 && latch == 1){
+        latch = 0;
+        return 0;
+      }
+      else{
+        return 0;
+      }
+    }
+  };
+
+  //timer(preset)-----------------------------
+  // Inputs: start(), reset()
+  // Outputs: .timerTiming, .done
+  //------------------------------------------
+  class timer{
+    private:
+    unsigned long startTime;
+    unsigned long preset;
+
+    public:
+    int timerTiming = 0;
+    int done;
+
+    timer(unsigned long presetInput){
+      preset = presetInput;
+    }
+
+    void start(){
+
+      if(timerTiming == 0 && done == 0){
+        startTime = millis();
+        timerTiming = 1; 
+      }
+
+      if(millis() - startTime >= preset && timerTiming == 1 && done == 0){
+        timerTiming = 0;
+        done = 1;
+      }
+    }
+
+    void reset(){
+      timerTiming = 0;
+      done = 0;
+    }
+
+  };
+
+  //countUp-----------------------------------
+  // Inputs: start(), stop(), reset()
+  // Outputs: .accumulatedTime .timerTiming
+  //------------------------------------------
+  class countUp{
+    private:
+    unsigned long startTime;
+
+    public:
+    unsigned long accumulatedTime = 0;
+    int timerTiming = 0;
+    int done;
+
+
+    void start(){
+      if(timerTiming == 0 && done == 0){
+        startTime = millis();
+        timerTiming = 1;
+      }
+    }
+
+    void stop(){
+      accumulatedTime = millis() - startTime;
+      done = 1;
+      timerTiming = 0;
+    }
+
+    void reset(){
+      done = 0;
+      timerTiming = 0;
+    }
+  };
+
+  //zoneObstructed(zone)--------------------------------
+  // Inputs: checkObstructed(obstructionNear, currentZone)
+  // Outputs: .zoneObstructed
+  //------------------------------------------
+  class zoneObstructed{
+    private:
+    int zone;
+    int pendingClear;
+    ons clearOns;
+    public:
+    int zoneObstructed;
+
+    zoneObstructed(int zn): zone(zn){
+    }
+
+    void checkObstructed(int obstructionNear, int currentZone){
+        if(zone == Currentzone && obstructionNear == 1){
+            zoneObstructed = 1;
+        }
+        if(zoneObstructed == 1 && zone == clearOns(currentZone)){
+            pendingClear++;
+        }
+        if(pendingClear == 3){
+            zoneObstructed = 0;
+            pendingClear = 0;
+        }
+    }
+  }
+
+//
+
+//======Devices======
+
+  //distance(trigPin, echoPin)----------------
+  // Inputs: measure()
+  // Outputs: returns distance
+  // Requires timer and ons class
+  //------------------------------------------
+  class distance{
+    private:
+    int trigPin;
+    int echoPin;
+    
+    unsigned long distance;
+    unsigned long duration;
+
+    timer initializeTimer;
+    timer triggerTimer;
+    timer resetTimer;
+    ons one;
+    
+    public:
+
+    distance(int trig, int echo) : trigPin(trig), echoPin(echo),initializeTimer(1), triggerTimer(1), resetTimer(50) {
+      pinMode(trigPin, OUTPUT);
+      pinMode(echoPin, INPUT);
+    }
+
+    int measure(){
+      //INIT 2ns
+      
+        resetTimer.start();
+        initializeTimer.start(); 
+        if(initializeTimer.timerTiming == 1){
+          digitalWrite(trigPin, LOW);
+        }
+
+        // Trigger 10 ns
+        if(initializeTimer.done == 1){
+          triggerTimer.start();
+        }
+        if(triggerTimer.timerTiming == 1){
+          digitalWrite(trigPin, HIGH);
+        }
+
+      //End Trigger
+        if(one.shot(triggerTimer.done) == 1){
+          digitalWrite(trigPin, LOW);
+          duration = pulseIn(echoPin, HIGH);
+          // Calculate the distance in centimeters
+          distance = duration * 0.034 / 2;
+
+          // Serial.print("Distance: ");
+          // Serial.print(distance);
+          // Serial.println(" cm");
+
+
+          //reset
+        }
+        if(resetTimer.done == 1){
+          initializeTimer.reset();
+          triggerTimer.reset();
+          resetTimer.reset();
+        }
+      
+        return distance;
+    }
+  };
+
+  //servoDrive(pwmPin)------------------------
+  // Inputs: sweep(), point(angle)
+  // Outputs: .angle
+  // requires timer class
+  //------------------------------------------
+  class servoDrive {
+    private:
+    int servoPin; // Define the pin for the servo control
+    int direction; // 0 = left 1 = right
+    int init; 
+    Servo servo;  // Create a servo object
+    timer servoRate;
+    
+    public:
+    int angle;
+    servoDrive(int pin) : servoPin(pin), servoRate(50)  {
+    }
+
+    void sweep(int maxAngle) {
+      if(init == 0){
+        servo.attach(servoPin);
+        init = 1;
+      }
+
+      // Sweep the servo from 0 to 180 degrees
+      servoRate.start();
+      if(servoRate.done == 1){
+        if(direction == 0){
+          angle = angle + 2;
+        }
+        if(direction == 1){
+          angle = angle -2;
+        }
+        servo.write(angle);
+        servoRate.reset();
+      }
+      if(angle <= 0){
+        direction = 0;
+      }
+      if(angle >= maxAngle){
+        direction = 1;
+      }
+    }
+    void point(int angle){
+            if(init == 0){
+        servo.attach(servoPin);
+        init = 1;
+      }
+    servo.write(angle);
+    }
+  };
+
+//
+
+//======Initialize Class======
+
+  distance rangeFinder(7,8);
+  servoDrive scanServo(11);
+  timer delayedStart(3000);
+
+  zoneObstructed zone1(1);
+  zoneObstructed zone2(2);
+  zoneObstructed zone3(3);
+  zoneObstructed zone4(4);
+
+//
+
+//======Setup======
+  void setup() {
+      // put your setup code here, to run once:
+    pinMode(leftForward, OUTPUT);
+    pinMode(leftReverse, OUTPUT);
+    pinMode(rightForward, OUTPUT);
+    pinMode(rightReverse, OUTPUT);
+
+    Serial.begin(9600);
+  }
+//
+
+//======Main Loop======
+  void loop() {
+  
+  //startup 2 seconds
+    if(startUpFlag == 0){
+      delay(2000);
+      startUpFlag = 1;
+    }
+
+  //  
+  
+  //sweep-------------------------------------
+  // Outputs: zone
+  // zone1 front left, zone2 front right, zone3 back left, zone4 back right
+  //------------------------------------------
+    scanServo.sweep(152);
+    liveAngle = scanServo.angle;
+    if(liveAngle != 0){
+      zone = (liveAngle/gearRatio)+1; 
+    }
+
+  //
+
+  //distance----------------------------------
+  // Outputs: obstructionFar,obstructionNear
+  //------------------------------------------
+    obstructionDistance = rangeFinder.measure();
+    if(obstructionDistance <= 100){
+      obstructionNear = 1;
+    }
+    else if(obstructionDistance >= 100 && obstructionDistance <= 200){
+      obstructionFar = 1;
+    }
+    else{
+      obstructionFar = 0;
+      obstructionNear = 0;
+    }
+  
+  //  
+    
+  //descision---------------------------------
+  // 
+  //------------------------------------------
+    zone1.checkObstructed(obstructionNear, zone)
+    zone2.checkObstructed(obstructionNear, zone)
+    zone3.checkObstructed(obstructionNear, zone)
+    zone4.checkObstructed(obstructionNear, zone)
+
+    
+    //reverse
+    if(zone1.zoneObstructed == 1 && zone2.zoneObstructed == 1 && turning != 1){
+      reverse = 1;
+      forward = 0;
+    }
+    else{
+        reverse = 0;
+    }
+
+    //forward
+    if(turning != 1 && reverse ==0){
+        forward = 1;
+    }
+
+    //right
+    if((zone1.zoneObstructed == 1 && forward == 1 ) || (zone3.zoneObstructed == 1 && reverse == 1 )){
+        right = 1;
+        turning = 1;
+        left = 0;
+    }
+
+    //left
+    if((zone2.zoneObstructed == 1 && forward == 1 ) || (zone4.zoneObstructed == 1 && reverse == 1 )){
+        left = 1;
+        turning = 1;
+        right = 0;
+    }
+
+  //
+  
+  //stearing----------------------------------
+  // Inputs: forward, reverse, left, right
+  //------------------------------------------
+    //forward
+    if(forward == 1){
+      digitalWrite(leftForward, HIGH); 
+      digitalWrite(leftReverse, LOW);  
+      digitalWrite(rightForward, HIGH);
+      digitalWrite(rightReverse, LOW); 
+    }
+
+    if(reverse ==1){
+      digitalWrite(leftForward, LOW);
+      digitalWrite(leftReverse, HIGH);
+      digitalWrite(rightForward, LOW);
+      digitalWrite(rightReverse, HIGH);
+    }
+
+    if(right ==1){
+      digitalWrite(leftForward, HIGH);
+      digitalWrite(leftReverse, LOW);
+      digitalWrite(rightForward, LOW);
+      digitalWrite(rightReverse, HIGH);
+    }
+
+    if(left == 1){
+      digitalWrite(leftForward, LOW);
+      digitalWrite(leftReverse, HIGH);
+      digitalWrite(rightForward, HIGH);
+      digitalWrite(rightReverse, LOW);
+    }
+
+  //
+
+  //error handeling-------------------------------------
+  // 
+  //------------------------------------------
+
+  //
+  }
+//
